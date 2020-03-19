@@ -1,0 +1,73 @@
+{% extends 'temp.html' %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<style>
+table, th, td {
+border: 1px solid black;
+}
+</style>
+
+
+<div class="container">
+<h3>Free Slots</h3>
+<table style="width:100%">
+   <tr>
+       <th>Name</th>
+
+       <th> Status </th>
+       <th> Action </th>
+   </tr>
+
+{% for student in details %}
+<tr>
+ <td>  {{ student.slot_name}}   </td>
+
+<td>{{student.status}} </td>
+<td>
+ <form method="POST">
+   {%csrf_token%}
+ <input type="hidden" name="student_id" value={{ student.slot_name }}>
+ <input type="submit" value="Book" name="Book">
+</form>
+
+</td>
+ </tr>
+{% endfor %}
+</table>
+
+<div id="toast" style="display: none" class="container-fluid">
+<div class="alert alert-success">
+ <center><strong>Success!</strong> OTP sent.</center>
+</div>
+</div>
+<div id="adder" style="display: none" class="container-fluid">
+<div class="alert alert-success">
+ <center><strong>Success!</strong> OTP RESENT</center>
+</div>
+</div>
+
+
+
+<a href="{%  url 'index'%}" class="btn btn-primary">Back</a>
+
+
+</div>
+<script type="text/javascript">
+function result () {
+ var toast = $("#toast");
+ var add = $("#add");
+ toast.show();
+ add.show();
+}
+function add() {
+ var adder = $("#adder").html();
+ $("#toast").html(adder);
+}
+</script>
+
+{% endblock %}

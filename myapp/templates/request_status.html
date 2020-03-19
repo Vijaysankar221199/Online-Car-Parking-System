@@ -1,0 +1,40 @@
+{% extends 'temp2.html' %}
+
+{% block content %}
+  <h3>Log of all bookings</h3>
+  <table style="width:100%">
+      <tr>
+          <th>Slot Name</th>
+          <th>Entry Time Stamp</th>
+  <th>Vehicle Number</th>
+
+            <th>Phone number</th>
+              <th>Parked Person</th>
+          <th>Status</th>
+          <th> Action</th>
+      </tr>
+
+  {% for student in details %}
+  <tr>
+    <td>  {{ student.slot_name}}   </td>
+      <td>  {{ student.date}}   </td>
+
+      <td>{{student.car_number}} </td>
+            <td>{{student.Phonenumber}} </td>
+
+<td>{{student.visiname}} </td>
+<td> {{student.status}} </td>
+<td>
+  	<form method="POST">
+      {%csrf_token%}
+    <input type="hidden" name="student_id" value={{ student.slot_name }}>
+    <input type="submit" value="Remove" name="Remove">
+  </form>
+
+   </td>
+    </tr>
+  {% endfor %}
+</table>
+
+<a href="{%  url 'index'%}" class="btn btn-primary">Back</a>
+{% endblock %}

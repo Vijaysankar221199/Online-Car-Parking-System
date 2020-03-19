@@ -1,0 +1,28 @@
+   {% extends 'temp1.html' %}
+
+{% block content %}
+  <h3>Add Slot</h3>
+
+
+
+<form method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+
+    <button type="submit"  >Upload</button>
+</form>
+
+<a href="{%  url 'index'%}" class="btn btn-primary">Back</a>
+
+</div>
+
+
+<script>
+function myFunction() {
+  alert("Request Sent !");
+  window.location.href = "dashboard.html";
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+   {% extends 'temp.html' %}
+
+{% block content %}
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+
+
+<div class="container">
+  <h3> Frequent Vistors</h3>
+  <table style="width:100%">
+      <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>image</th>
+          <th>Role</th>
+            <th>user</th>
+          <th>Date</th>
+          <th>Delete</th>
+      </tr>
+
+  {% for student in details %}
+  <tr>
+      <td>  {{ student.id}}   </td>
+    <td>  {{ student.name}}   </td>
+      <td>  {{ student.phone}}   </td>
+      <td>    <img src="{{ student.image.url }}" height="100" width="100" /> </td>
+
+  <td>    {{ student.role }} </td>
+<td>{{student.user}} </td>
+<td>{{student.date}} </td>
+<td>
+	<form method="POST">
+      {%csrf_token%}
+    <input type="hidden" name="student_id" value={{ student.id }}>
+    <input type="submit" value="remove" name="remove">
+
+  </form>
+</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<a href="{%  url 'index'%}" class="btn btn-primary">Back</a>
+
+
+</div>
+
+{% endblock %}

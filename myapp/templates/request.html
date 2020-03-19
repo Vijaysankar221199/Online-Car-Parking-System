@@ -1,0 +1,24 @@
+{% extends 'temp2.html' %}
+
+{% block content %}
+  <h3>All Slots</h3>
+  <table style="width:100%">
+      <tr>
+          <th>Slot Name</th>
+          <th>Created Time Stamp</th>
+
+          <th>Status</th>
+      </tr>
+
+  {% for student in details %}
+  <tr>
+    <td>  {{ student.slot_name}}   </td>
+      <td>  {{ student.date}}   </td>
+<td> {{student.status}} </td>
+
+    </tr>
+  {% endfor %}
+</table>
+
+<a href="{%  url 'index'%}" class="btn btn-primary">Back</a>
+{% endblock %}
