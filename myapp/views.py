@@ -21,7 +21,7 @@ import time
 import base64
 from django.utils import timezone
 from django.core.mail import EmailMessage
-
+import smtplib
 
 import os
 import time
@@ -59,7 +59,19 @@ def sms(msg, phn_number):
 secret_key = b'12345678901234567890'
 
 
+def mail (to_mail, visiname, slot_name):
+	to_mail = to_mail
+	visiname = visiname
+	slot_name = slot_name
+	s = smtplib.SMTP('smtp.gmail.com', 587)
+	s.starttls()
+	s.login("authixx@gmail.com", "SHEERO12")
+	message = visiname+  ", you Have Booked the slot " +slot_name+ ". Booking Confirmation is sent to mail and phone number "
+	s.sendmail("authixx@gmail.com", to_mail, message)
+	s.quit()
 
+
+######################################################################
 def index(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
@@ -171,6 +183,9 @@ status='occupied',car_number=car_number,Phonenumber = phone)
                 otpnumber= visiname + ", you Have Booked " + slot_name
                 number = '8072366581'
                 print(number)
+                email_id =  request.user.email
+                print(email_id)
+                mail(email_id, visiname, slot_name)
                 #email = EmailMessage('Subject', 'Body','authixx@gmail.com', to=['vvs221199@email.com'])
                 #email.send()
                 #sms (str(otpnumber),number)
