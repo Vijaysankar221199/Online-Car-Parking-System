@@ -152,13 +152,15 @@ def myexpected(request):
                 slot_name = slot.slot_name
                 slot.status = 'occupied'
                 slot.visiname = visiname
-                slot.save()
+                #slot.save()
                 print(slot.status)
                 now = timezone.now()
                 #visiname = request.user.username
                 profile =  Profile.objects.filter(user = visiname).first()
                 car_number = profile.car_number
                 phone = profile.Phonenumber
+                slot.car_number = car_number
+                slot.Phonenumber = phone
 
                 store_all = allbookings.objects.create(slot_name= slot_name,visiname=visiname,
 status='occupied',car_number=car_number,Phonenumber = phone)
@@ -172,7 +174,7 @@ status='occupied',car_number=car_number,Phonenumber = phone)
                 #email = EmailMessage('Subject', 'Body','authixx@gmail.com', to=['vvs221199@email.com'])
                 #email.send()
                 #sms (str(otpnumber),number)
-                #slot.save()
+                slot.save()
                 message = f" {visiname}  you Have Booked  {slot_name}. Booking Confirmation is sent to mail and phone number "
                 return HttpResponse(message, content_type='text/plain')
             elif 'No' in request.POST :
@@ -254,6 +256,8 @@ def allbook(request):
                 if team.status == 'occupied' or team.status!='NONE':
                     team.status = 'allow'
                     team.visiname = 'NONE'
+                    team.car_number = 'NONE'
+                    team.Phonenumber = "NONE"
                     team.save()
                 return HttpResponse("Removed", content_type='text/plain')
 
