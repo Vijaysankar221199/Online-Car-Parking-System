@@ -95,7 +95,7 @@ def myupdate(request):
             comment.save()
             #profile_form.save()
             messages.success(request, 'Your profile was successfully updated!')
-            return render(request,'inmates.html')
+            return HttpResponseRedirect(reverse('index',))
         else:
             messages.error(request, 'Please correct the error below.')
     else:
