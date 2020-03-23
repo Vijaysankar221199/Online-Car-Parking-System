@@ -147,11 +147,15 @@ def myexpected(request):
             return render(request,'Request_handling.html',stu)
         elif request.method == 'POST':
             if 'Book' in request.POST :
+                visiname = request.user.username
                 slot  = scanupload.objects.get(slot_name=request.POST.get("student_id"))
                 slot_name = slot.slot_name
-                print(slot_name)
+                slot.status = 'occupied'
+                slot.visiname = visiname
+                slot.save()
+                print(slot.status)
                 now = timezone.now()
-                visiname = request.user.username
+                #visiname = request.user.username
                 profile =  Profile.objects.filter(user = visiname).first()
                 car_number = profile.car_number
                 phone = profile.Phonenumber
@@ -168,7 +172,7 @@ status='occupied',car_number=car_number,Phonenumber = phone)
                 #email = EmailMessage('Subject', 'Body','authixx@gmail.com', to=['vvs221199@email.com'])
                 #email.send()
                 #sms (str(otpnumber),number)
-                slot.save()
+                #slot.save()
                 message = f" {visiname}  you Have Booked  {slot_name}. Booking Confirmation is sent to mail and phone number "
                 return HttpResponse(message, content_type='text/plain')
             elif 'No' in request.POST :
@@ -221,6 +225,7 @@ def request_status(request):
         else:
             username = request.user.username
             Image1 = scanupload.objects.filter(visiname = username , status='occupied')
+            print(Image1)
             Image1 = Image1.order_by('-id')
             profile = Profile.objects.filter(user = username).first()
             #combined_query = profile.union(Image1)
@@ -233,7 +238,7 @@ def request_status(request):
         #return render(request,'Request_handling.html',stu1)
         return HttpResponse("okay", content_type='text/plain')
 
-
+@login_required
 def allbook(request):
     if request.user.is_superuser:
         if request.method == 'GET':
@@ -248,14 +253,14 @@ def allbook(request):
 			#profile = Profile.objects.filter(user = team.username)
                 if team.status == 'occupied' or team.status!='NONE':
                     team.status = 'allow'
-                    #team.visiname = 'NONE'
+                    team.visiname = 'NONE'
                     team.save()
                 return HttpResponse("Removed", content_type='text/plain')
 
 
 @login_required
 def user_logout(request):
-    #instance = scanupload.objects.all()
+    #instance = allbookings.objects.all()
     #instance.delete()
     logout(request)
     return HttpResponseRedirect(reverse('index'))

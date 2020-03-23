@@ -5,6 +5,7 @@
   <table style="width:100%">
       <tr>
           <th>Slot Name</th>
+            <th>Parked Person</th>
           <th>Created Time Stamp</th>
 
           <th>Status</th>
@@ -14,6 +15,8 @@
   {% for student in details %}
   <tr>
     <td>  {{ student.slot_name}}   </td>
+    <td>  {{ student.visiname}}   </td>
+
       <td>  {{ student.date}}   </td>
 <td> {{student.status}} </td>
 
