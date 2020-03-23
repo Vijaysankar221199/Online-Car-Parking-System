@@ -65,9 +65,13 @@ def index(request):
             return render(request,'security.html',)
             #return HttpResponseRedirect('/admin/')
         else:
-            #pass
-            return render(request,'inmates.html',)
-            #rreturn HttpResponseRedirect('index')
+            user = request.user.username
+            check = Profile.objects.filter(user=user)
+            if check:
+            	return render(request,'inmates.html',)
+            else:
+                return render(request,'inmates - noprof.html',)
+			#rreturn HttpResponseRedirect('index')
     else:
         return render(request,'index.html',)
 
@@ -84,17 +88,19 @@ def dashboard(request):
 def myupdate(request):
     if request.method == 'POST':
 
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileForm(request.POST, request.FILES)
         if  profile_form.is_valid():
-
-            profile_form.save()
+            comment = profile_form.save(commit=False)
+            comment.user = request.user.username
+            comment.save()
+            #profile_form.save()
             messages.success(request, 'Your profile was successfully updated!')
             return render(request,'inmates.html')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
 
-        profile_form = ProfileForm(instance=request.user.profile)
+        profile_form = ProfileForm()
     return render(request, 'profile.html', {
 
         'profile_form': profile_form
@@ -143,9 +149,9 @@ def myexpected(request):
                 slot  = scanupload.objects.get(slot_name=request.POST.get("student_id"))
                 slot_name = slot.slot_name
                 print(slot_name)
-                profile = request.user.profile
                 now = timezone.now()
                 visiname = request.user.username
+                profile =  Profile.objects.filter(user = visiname).first()
                 car_number = profile.car_number
                 phone = profile.Phonenumber
                 slot.Phonenumber = phone
@@ -224,7 +230,7 @@ def request_status(request):
             username = request.user.username
             Image1 = scanupload.objects.filter(visiname = username , status='occupied')
             Image1 = Image1.order_by('-id')
-            profile = request.user.profile
+            profile = Profile.objects.filter(user = username).first()
             #combined_query = profile.union(Image1)
             print(profile.car_number)
             stu1 = {"details": Image1}
@@ -246,7 +252,7 @@ def allbook(request):
 
 @login_required
 def user_logout(request):
-    #instance = User.objects.all()
+    #instance = scanupload.objects.all()
     #instance.delete()
     logout(request)
     return HttpResponseRedirect(reverse('index'))

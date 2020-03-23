@@ -26,16 +26,15 @@
   <link href="static/lib/modal-video/css/modal-video.min.css" rel="stylesheet">
 
   <!-- Main Stylesheet File -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link href="static/css/style.css" rel="stylesheet">
 
+  <script>
+      $("document").ready( function () {
+          alert("Kindly Update the profile page to use the features");
+      });
+  </script>
 
-
-  <!-- =======================================================
-    Theme Name: eStartup
-    Theme URL: https://bootstrapmade.com/estartup-bootstrap-landing-page-template/
-    Author: BootstrapMade.com
-    License: https://bootstrapmade.com/license/
-  ======================================================= -->
 </head>
 
 <body>
@@ -53,9 +52,7 @@
         <ul class="nav-menu">
           <li class="menu-active"><a href="#hero">Home</a></li>
           <li><a href="{%  url 'myupdate'%}">Update My Profile</a></li>
-            <li><a href="{%  url 'myexpected'%}">Book</a></li>
 
-          <li><a href="{%  url 'request_status'%}">My Bookings</a></li>
           <li><a href="{%  url 'logout'%}">Logout</a></li>
         </ul>
       </nav><!-- #nav-menu-container -->

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from phone_field import PhoneField
 from datetime import datetime
-
+from django.conf import settings
 
 
 
@@ -24,11 +24,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user =  models.CharField(max_length=50, blank=True, null=True)
     car_number = models.TextField(max_length=500, blank=True)
     Phonenumber = models.CharField(max_length=30, blank=True)
 
-#
+
 # @receiver(post_save, sender=User)
 # def create_user_profile(sender, instance, created, **kwargs):
 #     if created:
@@ -37,7 +37,7 @@ class Profile(models.Model):
 # @receiver(post_save, sender=User)
 # def save_user_profile(sender, instance, **kwargs):
 #     instance.profile.save()
-#
+
 
 
 class otp(models.Model):
