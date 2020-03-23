@@ -20,17 +20,18 @@ from django_otp.oath import totp
 import time
 import base64
 from django.utils import timezone
+from django.core.mail import EmailMessage
 
 
 import os
 import time
 from twilio.rest import Client
 from playsound import playsound
-account_sid = 'AC730d2142614ea4d8220278bb5bd247fd'
-auth_token = 'fdd8833312fe3d2ebc9eb7142c3cb771'
+#account_sid = 'AC730d2142614ea4d8220278bb5bd247fd'
+#auth_token = 'fdd8833312fe3d2ebc9eb7142c3cb771'
 ##################################################################
-# account_sid = 'ACf896cacf87342b00d224a999be391e7e'
-# auth_token = 'c26c67fbb8193ebb4cec3a8364469a4a'
+account_sid = 'ACdd9ee1f7f4f9c4254478af04c0e5f2e0'
+auth_token = 'f591b18bfe88e2f89678fcf9699d7173'
 client = Client(account_sid, auth_token)
 
 
@@ -38,21 +39,21 @@ def sms(msg, phn_number):
 	message = client.messages \
 	                .create(
 	                     body=str(msg),
-	                     from_='+15093977702',
+	                     from_='+12816128275',
 	                     # from_='+15017122661',
 	                     to='+91'+ str(phn_number)
 	                 )
 
 	print(message.sid)
 
-def call(phn):
-	call = client.calls.create(
-	                        twiml='<Response><Say>Alert!, You have a request</Say></Response>',
-	                        to='+91'+str(phn),
-	                        from_='+15093977702'
-	                    )
-
-	print(call.sid)
+# def call(phn):
+# 	call = client.calls.create(
+# 	                        twiml='<Response><Say>Alert!, You have a request</Say></Response>',
+# 	                        to='+91'+str(phn),
+# 	                        from_='+15093977702'
+# 	                    )
+#
+# 	print(call.sid)
 
 
 secret_key = b'12345678901234567890'
@@ -154,21 +155,21 @@ def myexpected(request):
                 profile =  Profile.objects.filter(user = visiname).first()
                 car_number = profile.car_number
                 phone = profile.Phonenumber
-                slot.Phonenumber = phone
-                slot.visiname = visiname
-                slot.car_number = car_number
-                slot.status = "occupied"
-                slot.date = now
+
+                store_all = allbookings.objects.create(slot_name= slot_name,visiname=visiname,
+status='occupied',car_number=car_number,Phonenumber = phone)
 
 
                 # for delta in range(10,110,20):
                 #     otplist.append(totp(key=secret_key, step=10, digits=6, t0=(now-delta)))
                 otpnumber= visiname + ", you Have Booked " + slot_name
-                number = '7639147936'
+                number = '8072366581'
                 print(number)
+                #email = EmailMessage('Subject', 'Body','authixx@gmail.com', to=['vvs221199@email.com'])
+                #email.send()
                 #sms (str(otpnumber),number)
                 slot.save()
-                message = f"OTP is sent to {number}"
+                message = f" {visiname}  you Have Booked  {slot_name}. Booking Confirmation is sent to mail and phone number "
                 return HttpResponse(message, content_type='text/plain')
             elif 'No' in request.POST :
                 team = expectedvisitor.objects.get(id=request.POST.get("student_id"))
@@ -198,23 +199,14 @@ def addslot(request):
 def request_status(request):
     if request.user.is_superuser:
         if request.method == 'GET':
-            Image = scanupload.objects.all()
-            Image = Image.order_by('-id')
+            Image = allbookings.objects.all()
+            #Image = Image.order_by('-id')
             #print (Image)
             #print(type(Image))
 
             stu = {"details": Image }
             return render(request,'request_status.html',stu)
-        elif request.method == 'POST':
-            if 'Remove' in request.POST :
-                team = scanupload.objects.get(slot_name=request.POST.get("student_id"))
-                if team.status == 'occupied' or team.status!='NONE':
-                    team.status = 'allow'
-                    team.visiname = 'NONE'
-                    team.save()
-                return HttpResponse("Removed", content_type='text/plain')
-        else:
-            return HttpResponse("Removed", content_type='text/plain')
+
 
     else:
         if request.method == 'POST':
@@ -243,11 +235,22 @@ def request_status(request):
 
 
 def allbook(request):
-	Image1 = scanupload.objects.all()
-	Image1 = Image1.order_by('-id')
-	stu1 = {"details": Image1}
-	print (stu1)
-	return render(request,'Request.html',stu1)
+    if request.user.is_superuser:
+        if request.method == 'GET':
+            Image1 = scanupload.objects.all()
+	#Image1 = Image1.order_by('-id')
+            stu1 = {"details": Image1}
+            print (stu1)
+            return render(request,'Request.html',stu1)
+        elif request.method == 'POST':
+            if 'Remove' in request.POST :
+                team = scanupload.objects.get(slot_name=request.POST.get("student_id"))
+			#profile = Profile.objects.filter(user = team.username)
+                if team.status == 'occupied' or team.status!='NONE':
+                    team.status = 'allow'
+                    #team.visiname = 'NONE'
+                    team.save()
+                return HttpResponse("Removed", content_type='text/plain')
 
 
 @login_required

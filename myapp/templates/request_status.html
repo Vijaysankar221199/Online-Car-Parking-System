@@ -10,8 +10,6 @@
 
             <th>Phone number</th>
               <th>Parked Person</th>
-          <th>Status</th>
-          <th> Action</th>
       </tr>
 
   {% for student in details %}
@@ -23,15 +21,7 @@
             <td>{{student.Phonenumber}} </td>
 
 <td>{{student.visiname}} </td>
-<td> {{student.status}} </td>
-<td>
-  	<form method="POST">
-      {%csrf_token%}
-    <input type="hidden" name="student_id" value={{ student.slot_name }}>
-    <input type="submit" value="Remove" name="Remove">
-  </form>
 
-   </td>
     </tr>
   {% endfor %}
 </table>
